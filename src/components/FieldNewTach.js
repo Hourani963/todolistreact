@@ -31,9 +31,10 @@ export default function FieldNewTach({fetchTaches }) {
       };
 
   return (
-    <form onSubmit={handleSubmit}>
-        <TextField value={text} onChange={(e)=>setText(e.target.value)}  id="filled-basic" label="Filled" variant="filled" />
-        <TextField 
+    <form onSubmit={handleSubmit} style={{display:'flex', alignItems:"center", gap:"20px"}} >
+        <TextField style={{width:"400px"}}
+        value={text} onChange={(e)=>setText(e.target.value)}  id="filled-basic" label="Text tâche" variant="filled" />
+        <TextField style={{width:"100px"}}
             select 
             value={importance} 
             onChange={(e)=>setImportance(e.target.value)} 

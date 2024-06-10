@@ -12,7 +12,7 @@ export default function ListTaches({ taches, loading, error, fetchTaches }) {
   const formatDate = (isoString) => {
     const options = {
       year: 'numeric',
-      month: 'long',
+      month: 'numeric',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
@@ -30,37 +30,30 @@ export default function ListTaches({ taches, loading, error, fetchTaches }) {
   }
 
   return (
-    <div>
-      <h1>Taches List</h1>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        {taches.map((tache) => (
-          <ListItem
-            key={tache.id}
+      <table style={{ width: '100%', marginTop:"5%" }}>
+          <caption>
+          Taches List
+          </caption>
+          <tr>
+            <th scope="col">Check</th>
+            <th scope="col">Text</th>
+            <th scope="col">Importance</th>
+            <th scope="col">Date Creaction</th>
+            <th scope="col">Date Validation</th>
+            <th scope="col">Delete</th>
+          </tr>
 
-            disablePadding
-          >
-             <ListItemIcon>
-                <CheckBoxTache
-                  tache={tache} fetchTaches={fetchTaches}
-                 
-                />
-              </ListItemIcon>
-           <ListItemText id={tache.id} primary={tache.text} />
-           <ListItemText id={tache.id} primary={tache.importance} />
-            <ListItemText id={tache.id} primary={formatDate(tache.creationDate)} />
-            {tache.doneDate && 
-            <ListItemText id={tache.id} primary={formatDate(tache.doneDate)} />
-            }
+        {taches.map((tache) => (
+            <tr key={tache.id}>
+              <th scope="row"><CheckBoxTache tache={tache} fetchTaches={fetchTaches} /></th>
+              <td >{tache.text}</td>
+              <td>{tache.importance}</td>
+              <td>{formatDate(tache.creationDate)}</td>
               
-              <DeleteTacheButton id={tache.id} fetchTaches={fetchTaches}></DeleteTacheButton>
-            
-          </ListItem>
-            
+              <td>{tache.doneDate && <ListItemText id={tache.id} primary={formatDate(tache.doneDate)} />}</td>
+              <td><DeleteTacheButton id={tache.id} fetchTaches={fetchTaches}></DeleteTacheButton></td>
+            </tr>
           ))}
-      </List>
-      
-        
- 
-    </div>
+      </table>
   );
 }
