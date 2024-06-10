@@ -1,14 +1,12 @@
-import {React} from 'react';
+import React, { useState } from 'react';
 import DeleteTacheButton from './DeleteTacheButton';
 import CheckBoxTache from './CheckBoxTache';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-
-
+import Pagination from '@mui/material/Pagination';
 
 export default function ListTaches({ taches, loading, error, fetchTaches }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const formatDate = (isoString) => {
     const options = {
       year: 'numeric',
@@ -29,31 +27,49 @@ export default function ListTaches({ taches, loading, error, fetchTaches }) {
     return <div>Error: {error}</div>;
   }
 
+  // Calculate the items to display based on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = taches.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
   return (
-      <table style={{ width: '100%', marginTop:"5%" }}>
-          <caption>
-          Taches List
-          </caption>
+    <div style={{ width: '100%', marginTop: "5%", display:'flex', flexDirection:"column", alignItems:"center" }}>
+      <table style={{ width: '100%' }}>
+        <caption style={{marginBottom : "20px"}} >Taches List</caption>
+        <thead>
           <tr>
             <th scope="col">Check</th>
             <th scope="col">Text</th>
             <th scope="col">Importance</th>
-            <th scope="col">Date Creaction</th>
+            <th scope="col">Date Creation</th>
             <th scope="col">Date Validation</th>
             <th scope="col">Delete</th>
           </tr>
-
-        {taches.map((tache) => (
+        </thead>
+        <tbody>
+          {currentItems.map((tache) => (
             <tr key={tache.id}>
               <th scope="row"><CheckBoxTache tache={tache} fetchTaches={fetchTaches} /></th>
-              <td >{tache.text}</td>
+              <td>{tache.text}</td>
               <td>{tache.importance}</td>
               <td>{formatDate(tache.creationDate)}</td>
-              
-              <td>{tache.doneDate && <ListItemText id={tache.id} primary={formatDate(tache.doneDate)} />}</td>
-              <td><DeleteTacheButton id={tache.id} fetchTaches={fetchTaches}></DeleteTacheButton></td>
+              <td>{tache.doneDate && <>{formatDate(tache.doneDate)}</>}</td>
+              <td><DeleteTacheButton id={tache.id} fetchTaches={fetchTaches} /></td>
             </tr>
           ))}
+        </tbody>
       </table>
+      <Pagination 
+        count={Math.ceil(taches.length / itemsPerPage)} 
+        page={currentPage} 
+        onChange={handlePageChange} 
+        variant="outlined" 
+        style={{ marginTop: '20px' }}
+      />
+    </div>
   );
 }

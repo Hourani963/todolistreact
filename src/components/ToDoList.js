@@ -10,8 +10,8 @@ export default function ToDoList() {
 
 
   return (
-    <Box component="section" sx={{ p: 2, border: '1px dashed grey' }}  >
-      <FieldNewTach fetchTaches={fetchTaches}  ></FieldNewTach>
+    <Box component="section"   >
+      <FieldNewTach  fetchTaches={fetchTaches}  ></FieldNewTach>
       <ListTaches taches={taches} loading={loading} error={error} fetchTaches={fetchTaches} ></ListTaches>
       </Box>
     );
